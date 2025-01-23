@@ -1,0 +1,51 @@
+@use './reset';
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-weight: normal;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 0;
+}
+
+.container,
+.main {
+    height: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.board {
+    padding: 1rem;
+}
+
+.footer {
+    min-height: 3rem;
+}

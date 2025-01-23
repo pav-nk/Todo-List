@@ -1,30 +1,33 @@
 {
-  "name": "webpack-boilerplate",
-  "version": "1.0.0",
-  "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "dev": "webpack serve --open --config webpack.dev.js",
-    "deploy": "git subtree push --prefix dist origin gh-pages"
-  },
-  "keywords": [],
-  "author": "pav-nk",
-  "license": "MIT",
-  "devDependencies": {
-    "css-loader": "^7.1.2",
-    "eslint": "^9.17.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "globals": "^15.14.0",
-    "html-loader": "^5.1.0",
-    "html-webpack-plugin": "^5.6.3",
-    "prettier": "3.4.2",
-    "sass": "^1.83.4",
-    "sass-loader": "^16.0.4",
-    "style-loader": "^4.0.0",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.0",
-    "webpack-merge": "^6.0.1"
-  }
+    "name": "webpack-boilerplate",
+    "version": "1.0.0",
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "dev": "webpack serve --open --config webpack.dev.js",
+        "deploy": "git subtree push --prefix dist origin gh-pages"
+    },
+    "keywords": [],
+    "author": "pav-nk",
+    "license": "MIT",
+    "devDependencies": {
+        "css-loader": "^7.1.2",
+        "eslint": "^9.17.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "globals": "^15.14.0",
+        "html-loader": "^5.1.0",
+        "html-webpack-plugin": "^5.6.3",
+        "prettier": "3.4.2",
+        "sass": "^1.83.4",
+        "sass-loader": "^16.0.4",
+        "style-loader": "^4.0.0",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.97.1",
+        "webpack-cli": "^6.0.1",
+        "webpack-dev-server": "^5.2.0",
+        "webpack-merge": "^6.0.1"
+    },
+    "dependencies": {
+        "spectre.css": "^0.5.9"
+    }
 }
