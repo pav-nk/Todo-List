@@ -4,86 +4,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo-list</title>
+    <link rel="icon" type="image/x-icon" href="./assets/svg/icon.svg">
+    <title>TODO APP</title>
 </head>
 
 <body>
     <div class="container">
-        <div class="columns main">
-            <div class="sidebar column col-3 col-lg-4 col-md-6 bg-gray">
-                <div class="sidebar-main">
-                    <header class="sidebar-header">
-                        <h1 class="h4"><b>TODO APP</b></h1>
-                    </header>
-                    <div class="sidebar-nav">
+        <main class="columns main">
+            <section class="sidebar column col-4 col-md-6 bg-gray">
+                <div class="wrapper">
+                    <div class="sidebar-header">
+                        <h1 class="h4 title"><i class="icon icon-check"></i><b>TODO APP</b></h1>
+                    </div>
+                    <div class="toast toast-primary">
+                        Here you can save your tasks!
+                    </div>
+                    <div class="sidebar-sections">
                         <ul class="menu">
                             <li class="menu-item">
-                                <a href="#">
-                                    <i class="icon icon-link"></i> Inbox
+                                <a class="link" href="#">
+                                    <i class="icon icon-arrow-right"></i>
+                                    Today
                                 </a>
                                 <div class="menu-badge">
-                                    <label class="label label-primary">1</label>
+                                    <label class="label label-primary">0</label>
                                 </div>
                             </li>
                             <li class="menu-item">
-                                <a href="#">
-                                    <i class="icon icon-link"></i> Today
+                                <a class="link" href="#">
+                                    <i class="icon icon-arrow-right"></i>
+                                    Upcoming
                                 </a>
                                 <div class="menu-badge">
-                                    <label class="label label-primary">1</label>
+                                    <label class="label label-primary">0</label>
                                 </div>
                             </li>
                             <li class="menu-item">
-                                <a href="#">
-                                    <i class="icon icon-link"></i> Upcoming
+                                <a class="link" href="#">
+                                    <i class="icon icon-arrow-right"></i>
+                                    Completed tasks
                                 </a>
                                 <div class="menu-badge">
-                                    <label class="label label-primary">1</label>
+                                    <label class="label label-primary">0</label>
                                 </div>
                             </li>
                         </ul>
                     </div>
-                    <div class="sidebar-projects">
+                    <div class="sidebar-projects projects">
                         <ul class="menu">
                             <li class="divider" data-content="PROJECTS"></li>
                             <li class="menu-item">
-                                <a href="#">
-                                    <i class="icon icon-link"></i> Unplaced
+                                <a class="link" href="#">
+                                    <i class="icon icon-arrow-right"></i>
+                                    Unplaced
                                 </a>
+                            </li>
+                            <li class="menu-item project">
+                                <a class="link" href="#">
+                                    <i class="icon icon-arrow-right"></i>
+                                    Project 1
+                                </a>
+                                <div class="menu-badge">
+                                    <button class="btn btn-sm btn-action"><i class="icon icon-edit"></i></button>
+                                    <button class="btn btn-sm btn-action"><i class="icon icon-delete"></i></button>
+                                </div>
                             </li>
                         </ul>
                         <div class="divider"></div>
                         <div class="input-group">
                             <input class="form-input" type="text" placeholder="Project name">
                             <button class="btn btn-error input-group-btn">Clear</button>
-                            <button class="btn btn-success input-group-btn">Add +</button>
+                            <button class="btn btn-success input-group-btn">+ Add</button>
                         </div>
                     </div>
                 </div>
                 <div class="sidebar-footer">
-                    <p class="link-text">
+                    <p class="description">
                         Copyright © 2025
-                        <a class="link-github" href="https://github.com/pav-nk" target="_blank"></a>
+                        <a class="github" href="https://github.com/pav-nk" target="_blank"></a>
                     </p>
                 </div>
-            </div>
-            <div class="board column col-9 col-lg-8 col-md-6">
-                <div class="board-main">
-                    <h2 class="h4"><b>UNPLACED</b></h2>
-                    <div class="tasks">
-                        <div class="form-group">
-                            <label class="form-checkbox">
-                                <input type="checkbox">
-                                <i class="form-icon"></i> First task
-                            </label>
+            </section>
+            <section class="field column col-8 col-md-6">
+                <div class="field-main">
+                    <h2 class="h4 title"><b>UNPLACED</b></h2>
+                    <div class="field-tasks">
+                        <div class="menu task">
+                            <div class="form-group columns field-task">
+                                <div class="column">
+                                    <label class="form-checkbox task-checkbox">
+                                        <input type="checkbox"><i class="form-icon"></i>
+                                        My first task
+                                    </label>
+                                </div>
+                                <div class="column col-auto task-info">
+                                    <span class="chip">Your note</span>
+                                    <span class="chip">01.01.2025</span>
+                                    <span class="chip">High</span>
+                                    <div class="task-controls">
+                                        <button class="btn btn-sm btn-action"><i class="icon icon-edit"></i></button>
+                                        <button class="btn btn-sm btn-action"><i class="icon icon-delete"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group field-task-edit">
+                                <div class="input-group">
+                                    <input class="form-input" type="text" placeholder="Enter name">
+                                    <input class="form-input" type="text" placeholder="Enter note">
+                                    <select class="form-select">
+                                        <option>Unplaced</option>
+                                        <option>Project 1</option>
+                                    </select>
+                                    <input class="form-input" type="date" value="01.01.2025">
+                                    <select class="form-select field-select">
+                                        <option value="default">Default</option>
+                                        <option value="low">Low</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                    <button class="btn input-group-btn">Add task</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="board-footer bg-gray">
-                    <button class="btn btn-success btn-lg">+ New Task</button>
+                <div class="field-footer bg-gray">
+                    <button class="btn btn-success btn-lg" id="btn-new-task">+ New Task</button>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
     </div>
 </body>
 
