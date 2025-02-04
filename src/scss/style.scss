@@ -80,6 +80,12 @@ h4 {
     gap: 1rem;
 }
 
+.field-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 .field-footer {
     margin-top: -0.4rem;
     background-color: #ffffff;
@@ -123,4 +129,17 @@ h4 {
 .projects .menu-badge {
     margin-right: 0.4rem;
     gap: 0.2rem;
+}
+
+.field-footer {
+    display: flex;
+    flex-direction: row;
+}
+
+.completed {
+    text-decoration: line-through;
+}
+
+.hidden {
+    display: none;
 }
