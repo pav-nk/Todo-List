@@ -1,11 +1,26 @@
 class Task {
-    constructor({ name, date, priority, note, project }) {
-        this.name = name;
-        this.date = date;
-        this.priority = priority;
-        this.note = note;
-        this.project = project;
+    constructor() {
+        this.id = null;
+        this.name = null;
+        this.date = null;
+        this.priority = null;
+        this.note = null;
+        this.project = null;
         this.isChecked = false;
+    }
+
+    toggleChecked() {
+        this.isChecked = !this.isChecked;
+        return this.isChecked;
+    }
+
+    generateId() {
+        this.id = Date.now();
+        return this.id;
+    }
+
+    getId() {
+        return this.id;
     }
 
     toggleStatus() {}
@@ -30,16 +45,13 @@ class Task {
         return this.project;
     }
 
-    getCheckedStatus() {
-        return this.isChecked;
+    update({ name, date, priority, note, project }) {
+        this.name = name;
+        this.date = date;
+        this.priority = priority;
+        this.note = note;
+        this.project = project;
     }
-
-    toggleStatus() {
-        this.isChecked = !this.isChecked;
-        return !this.isChecked;
-    }
-
-    render() {}
 }
 
 export default Task;
