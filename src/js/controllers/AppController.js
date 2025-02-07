@@ -2,19 +2,46 @@ import Project from '../components/Project';
 import Task from '../components/Task';
 
 class AppController {
-    static date = (new Date()).toISOString().split('T')[0];
+    static date = new Date().toISOString().split('T')[0];
     static tasks = [];
-    static projects = [
-        new Project({name: 'Unplaced'}),
-    ];
+    static projects = [new Project({ name: 'Unplaced' })];
     static completedTasks = [];
     static activeProject = 'Unsorted';
     static priorities = ['Default', 'Low', 'High'];
-    static groups = {
+    static counts = {
+        taskDateObj: {},
+        completed: 0,
         today: 0,
         upcoming: 0,
-        completed: 0,
     };
+
+    static getAppCounts() {
+        return {
+            completed: this.counts.completed,
+            today: this.counts.today,
+            upcoming: this.counts.upcoming,
+        };
+    }
+
+    static updateState(taskIsChecked) {
+        if (taskIsChecked) {
+            this.counts.completed += 1;
+        } else {
+            this.counts.completed -= 1;
+        }
+    }
+
+    static updateDateState(taskId, taskDate) {
+        this.counts.taskDateObj[taskId] = {
+            isToday: taskDate === this.date,
+        };
+
+        this.counts.today = +Object.values(this.counts.taskDateObj).filter(
+            (task) => task.isToday,
+        ).length;
+        this.counts.upcoming =
+            +Object.keys(this.counts.taskDateObj).length - this.counts.today;
+    }
 
     static getPriorities() {
         return this.priorities;
@@ -37,7 +64,8 @@ class AppController {
     }
 
     static deleteTask(id) {
-        this.tasks = this.tasks.filter(task => task.getId() !== id);
+        this.tasks = this.tasks.filter((task) => task.getId() !== id);
+        delete this.counts.taskDateList[id];
     }
 
     static getActiveProject() {
@@ -49,7 +77,9 @@ class AppController {
     }
 
     static clearAllTasks() {
-        this.tasks = this.tasks.filter(task => task.getProject() !== this.getActiveProject());
+        this.tasks = this.tasks.filter(
+            (task) => task.getProject() !== this.getActiveProject(),
+        );
     }
 }
 

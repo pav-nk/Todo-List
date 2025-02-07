@@ -3,13 +3,18 @@ import AppController from './AppController';
 const tasksField = document.getElementById('field-tasks');
 const btnNewTask = document.getElementById('btn-new-task');
 const btnRemoveTasks = document.getElementById('btn-remove-task');
+const labelToday = document.getElementById('label-today');
+const labelUpcoming = document.getElementById('label-upcoming');
+const labelCompleted = document.getElementById('label-completed');
 
 class ScreenController {
     static app = AppController;
 
     static init() {
         btnNewTask.addEventListener('click', () => this.clickHandlerAddTask());
-        btnRemoveTasks.addEventListener('click', () => this.clickHandlerClearTasks());
+        btnRemoveTasks.addEventListener('click', () =>
+            this.clickHandlerClearTasks(),
+        );
     }
 
     static clickHandlerAddTask(e) {
@@ -32,21 +37,15 @@ class ScreenController {
     }
 
     static renderSelectOptions() {
-        return this.app.getAllProjectNames()
-            .map(
-                (name) => {
-                    return this.createTaskOption(name);
-                }
-            )
+        return this.app.getAllProjectNames().map((name) => {
+            return this.createTaskOption(name);
+        });
     }
 
     static renderPriorities() {
-        return this.app.getPriorities()
-            .map(
-                (name) => {
-                    return this.createTaskOption(name);
-                }
-            )
+        return this.app.getPriorities().map((name) => {
+            return this.createTaskOption(name);
+        });
     }
 
     static renderTask(currentTask) {
@@ -92,7 +91,14 @@ class ScreenController {
         addBtnTask.classList.add('btn', 'input-group-btn');
         addBtnTask.setAttribute('id', 'add-task');
         addBtnTask.textContent = 'Add Task';
-        taskForm.append(inputName, inputNote, inputDate, selectProject, selectPriority, addBtnTask);
+        taskForm.append(
+            inputName,
+            inputNote,
+            inputDate,
+            selectProject,
+            selectPriority,
+            addBtnTask,
+        );
 
         // Task
 
@@ -124,13 +130,23 @@ class ScreenController {
         taskPriority.classList.add('chip', 'task-priority');
 
         const btnEditTask = document.createElement('button');
-        btnEditTask.classList.add('btn', 'btn-sm', 'btn-action', 'btn-task-edit');
+        btnEditTask.classList.add(
+            'btn',
+            'btn-sm',
+            'btn-action',
+            'btn-task-edit',
+        );
         const editIcon = document.createElement('i');
         editIcon.classList.add('icon', 'icon-edit');
         btnEditTask.append(editIcon);
 
         const btnDeleteTask = document.createElement('button');
-        btnDeleteTask.classList.add('btn', 'btn-sm', 'btn-action', 'btn-task-delete');
+        btnDeleteTask.classList.add(
+            'btn',
+            'btn-sm',
+            'btn-action',
+            'btn-task-delete',
+        );
         const deleteIcon = document.createElement('i');
         deleteIcon.classList.add('icon', 'icon-delete');
 
@@ -147,7 +163,18 @@ class ScreenController {
         taskContainer.append(taskForm);
         taskContainer.append(task);
         tasksField.append(taskContainer);
-        this.addTaskEventHandlers(currentTask, {taskContainer, taskForm, task, taskName, taskNote, taskDate, taskPriority, btnEditTask, btnDeleteTask, checkbox});
+        this.addTaskEventHandlers(currentTask, {
+            taskContainer,
+            taskForm,
+            task,
+            taskName,
+            taskNote,
+            taskDate,
+            taskPriority,
+            btnEditTask,
+            btnDeleteTask,
+            checkbox,
+        });
     }
 
     static addTaskEventHandlers(currentTask, nodelist) {
@@ -167,6 +194,11 @@ class ScreenController {
             btnNewTask.removeAttribute('disabled');
             currentTask.update(data);
             this.updateTaskView(currentTask, nodelist);
+            this.app.updateDateState(
+                currentTask.getId(),
+                currentTask.getDate(),
+            );
+            this.updateLabelDate(this.app.getAppCounts());
         });
         nodelist.btnDeleteTask.addEventListener('click', (evt) => {
             nodelist.taskContainer.remove();
@@ -175,17 +207,32 @@ class ScreenController {
         nodelist.btnEditTask.addEventListener('click', (evt) => {
             nodelist.task.classList.add('hidden');
             nodelist.taskForm.classList.remove('hidden');
-            console.log(this.app.getTasks());
         });
         nodelist.checkbox.addEventListener('click', (evt) => {
             currentTask.toggleChecked();
+            this.app.updateState(currentTask.getTaskState());
             nodelist.taskName.classList.toggle('completed');
             nodelist.taskContainer.classList.toggle('bg-gray');
             nodelist.taskContainer.classList.toggle('bg-secondary');
-        })
+            this.updateLabelState(this.app.getAppCounts());
+        });
     }
 
-    static updateTaskView(currentTask, {taskName, taskNote, taskDate, taskPriority}) {
+    static updateLabelState(data) {
+        const { completed } = data;
+        labelCompleted.textContent = completed;
+    }
+
+    static updateLabelDate(data) {
+        const { today, upcoming } = data;
+        labelToday.textContent = today;
+        labelUpcoming.textContent = upcoming;
+    }
+
+    static updateTaskView(
+        currentTask,
+        { taskName, taskNote, taskDate, taskPriority },
+    ) {
         taskName.textContent = currentTask.getName();
         taskNote.textContent = currentTask.getNote();
         taskDate.textContent = currentTask.getDate();

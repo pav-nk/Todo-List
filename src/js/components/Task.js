@@ -14,6 +14,10 @@ class Task {
         return this.isChecked;
     }
 
+    getTaskState() {
+        return this.isChecked;
+    }
+
     generateId() {
         this.id = Date.now();
         return this.id;
@@ -22,8 +26,6 @@ class Task {
     getId() {
         return this.id;
     }
-
-    toggleStatus() {}
 
     getName() {
         return this.name;
