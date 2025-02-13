@@ -25,7 +25,12 @@ h4 {
 .title {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+
+    &--project {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
 }
 
 .container {
@@ -113,6 +118,7 @@ h4 {
 .chip {
     border-radius: 0;
     margin: 0;
+    font-size: 0.8rem;
 }
 
 .task-controls {
@@ -143,6 +149,16 @@ h4 {
 .label {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+}
+
+.task-name {
+    font-size: 0.8rem;
+}
+
+.menu .menu-item>.link {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
 }
 
 .hidden {

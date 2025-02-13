@@ -14,10 +14,10 @@
             <section class="sidebar column col-4 bg-gray">
                 <div class="wrapper">
                     <div class="sidebar-header">
-                        <h1 class="h4 title"><i class="icon icon-check"></i><b>TODO APP</b></h1>
+                        <h1 class="title"><b>TODO APP</b><i class="icon icon-check"></i></h1>
                     </div>
                     <div class="toast toast-primary">
-                        Here you can save your tasks!
+                        Here you can save your todos!
                     </div>
                     <div class="sidebar-sections">
                         <ul class="menu">
@@ -48,31 +48,23 @@
                         </ul>
                     </div>
                     <div class="sidebar-projects projects">
-                        <ul class="menu">
+                        <ul class="menu" id="project-menu">
                             <li class="divider" data-content="PROJECTS"></li>
                             <li class="menu-item">
-                                <a class="link" href="#">
+                                <a class="link" id="default-project" data-name="unplaced" href="#">
                                     <i class="icon icon-arrow-right"></i>
-                                    Unplaced
+                                    <span>unplaced</span>
                                 </a>
-                            </li>
-                            <li class="menu-item project">
-                                <a class="link" href="#">
-                                    <i class="icon icon-arrow-right"></i>
-                                    Project 1
-                                </a>
-                                <div class="menu-badge">
-                                    <button class="btn btn-sm btn-action"><i class="icon icon-edit"></i></button>
-                                    <button class="btn btn-sm btn-action"><i class="icon icon-delete"></i></button>
-                                </div>
                             </li>
                         </ul>
                         <div class="divider"></div>
-                        <div class="input-group">
-                            <input class="form-input" type="text" placeholder="Project name" required>
-                            <button class="btn btn-error input-group-btn c-hand">Clear</button>
-                            <button class="btn btn-success input-group-btn c-hand">+ Add</button>
-                        </div>
+                        <form class="input-group" id="form-project">
+                            <input class="form-input" type="text" placeholder="Project name" name="project-name"
+                                required>
+                            <button id="btn-project-clear" class="btn btn-error input-group-btn c-hand">Clear</button>
+                            <button id="btn-project-add" type="submit" class="btn btn-success input-group-btn c-hand">+
+                                Add</button>
+                        </form>
                     </div>
                 </div>
                 <div class="sidebar-footer">
@@ -84,7 +76,7 @@
             </section>
             <section class="field column col-8">
                 <div class="field-main">
-                    <h2 class="h4 title"><b>UNPLACED</b></h2>
+                    <h2 id="project-title" class="h4 title title--project">unplaced</h2>
                     <div class="field-tasks" id="field-tasks">
                     </div>
                 </div>

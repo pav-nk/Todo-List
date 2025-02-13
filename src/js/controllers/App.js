@@ -1,12 +1,12 @@
 import Project from '../components/Project';
 import Task from '../components/Task';
 
-class AppController {
+class App {
     static date = new Date().toISOString().split('T')[0];
     static tasks = [];
-    static projects = [new Project({ name: 'Unplaced' })];
+    static projects = [new Project({ name: 'unplaced' })];
     static completedTasks = [];
-    static activeProject = 'Unsorted';
+    static activeProject = 'unplaced';
     static priorities = ['Default', 'Low', 'High'];
     static counts = {
         taskDateObj: {},
@@ -14,6 +14,14 @@ class AppController {
         today: 0,
         upcoming: 0,
     };
+
+    static getSelectedTasks() {
+        if (this.tasks.length === 0) return [];
+        const currentTasks = this.tasks.filter(
+            (task) => task.getProject() === this.getActiveProject(),
+        );
+        return currentTasks;
+    }
 
     static getAppCounts() {
         return {
@@ -65,11 +73,16 @@ class AppController {
 
     static deleteTask(id) {
         this.tasks = this.tasks.filter((task) => task.getId() !== id);
-        delete this.counts.taskDateList[id];
+        delete this.counts.taskDateObj[id];
     }
 
     static getActiveProject() {
         return this.activeProject;
+    }
+
+    static setActiveProject(name) {
+        this.activeProject = name;
+        return name;
     }
 
     static getAllProjectNames() {
@@ -83,4 +96,4 @@ class AppController {
     }
 }
 
-export default AppController;
+export default App;

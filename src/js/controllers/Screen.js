@@ -1,4 +1,4 @@
-import AppController from './AppController';
+import App from './App';
 
 const tasksField = document.getElementById('field-tasks');
 const btnNewTask = document.getElementById('btn-new-task');
@@ -6,19 +6,82 @@ const btnRemoveTasks = document.getElementById('btn-remove-task');
 const labelToday = document.getElementById('label-today');
 const labelUpcoming = document.getElementById('label-upcoming');
 const labelCompleted = document.getElementById('label-completed');
+const projectMenu = document.getElementById('project-menu');
+const formToAddProject = document.getElementById('form-project');
+const btnProjectClear = document.getElementById('btn-project-clear');
+const btnProjectAdd = document.getElementById('btn-project-add');
+const defaultProject = document.getElementById('default-project');
+const projectTitle = document.getElementById('project-title');
 
-class ScreenController {
-    static app = AppController;
+class Screen {
+    static app = App;
 
     static init() {
         btnNewTask.addEventListener('click', () => this.clickHandlerAddTask());
         btnRemoveTasks.addEventListener('click', () =>
             this.clickHandlerClearTasks(),
         );
+        formToAddProject.addEventListener('submit', (evt) =>
+            this.addNewProject(evt),
+        );
+        btnProjectClear.addEventListener('click', () => {
+            formToAddProject.reset();
+        });
+        defaultProject.addEventListener('click', (evt) =>
+            this.updateSelectedTasks(evt),
+        );
+    }
+
+    static renderProjectItem(data, project) {
+        const menuItem = document.createElement('li');
+        menuItem.classList.add('menu-item');
+        const link = document.createElement('a');
+        link.classList.add('link');
+        link.setAttribute('href', '#');
+        link.setAttribute('data-name', `${project.getName()}`);
+        const icon = document.createElement('i');
+        icon.classList.add('icon', 'icon-arrow-right');
+        const projectName = document.createElement('span');
+        projectName.textContent = data.name;
+        const controls = document.createElement('div');
+        controls.classList.add('menu-badge');
+
+        const btnDelete = document.createElement('button');
+        btnDelete.classList.add('btn', 'btn-sm', 'btn-action');
+        const deleteIcon = document.createElement('i');
+        deleteIcon.classList.add('icon', 'icon-delete');
+
+        btnDelete.append(deleteIcon);
+        controls.append(btnDelete);
+
+        link.append(icon, projectName);
+
+        menuItem.append(link, controls);
+        projectMenu.append(menuItem);
+
+        this.addProjectEventHandlers(link, btnDelete);
+    }
+
+    static addProjectEventHandlers(link, btnDelete) {
+        link.addEventListener('click', (evt) => this.updateSelectedTasks(evt));
+    }
+
+    static addNewProject(evt) {
+        evt.preventDefault();
+        const currentForm = evt.target;
+        const formData = new FormData(currentForm);
+        const data = {
+            name: formData.get('project-name'),
+        };
+        currentForm.reset();
+        const currentProject = this.app.createProject(data);
+        this.renderProjectItem(data, currentProject);
     }
 
     static clickHandlerAddTask(e) {
         btnNewTask.setAttribute('disabled', '');
+        btnProjectAdd.setAttribute('disabled', '');
+        btnRemoveTasks.setAttribute('disabled', '');
         const currentTask = this.app.createTask();
         currentTask.generateId();
         this.renderTask(currentTask);
@@ -48,7 +111,7 @@ class ScreenController {
         });
     }
 
-    static renderTask(currentTask) {
+    static renderTask(currentTask, isFormActive = true) {
         const taskContainer = document.createElement('div');
         taskContainer.classList.add('menu', 'task', 'bg-gray');
         taskContainer.setAttribute('id', currentTask.getId());
@@ -74,6 +137,7 @@ class ScreenController {
         selectProject.setAttribute('required', '');
         selectProject.append(...this.renderSelectOptions());
         selectProject.classList.add('form-select', 'field-select');
+        selectProject.value = this.app.getActiveProject();
         const inputDate = document.createElement('input');
         inputDate.setAttribute('type', 'date');
         inputDate.setAttribute('name', 'date');
@@ -103,7 +167,7 @@ class ScreenController {
         // Task
 
         const task = document.createElement('div');
-        task.classList.add('form-group', 'columns', 'field-task', 'hidden');
+        task.classList.add('form-group', 'columns', 'field-task');
         const taskNameWrapper = document.createElement('div');
         taskNameWrapper.classList.add('column');
         const label = document.createElement('label');
@@ -162,6 +226,23 @@ class ScreenController {
 
         taskContainer.append(taskForm);
         taskContainer.append(task);
+
+        if (isFormActive) {
+            task.classList.add('hidden');
+        }
+
+        if (!isFormActive) {
+            taskForm.classList.add('hidden');
+            inputName.value = currentTask.getName();
+            inputNote.value = currentTask.getNote();
+            this.updateTaskView(currentTask, {
+                taskName,
+                taskNote,
+                taskDate,
+                taskPriority,
+            });
+        }
+
         tasksField.append(taskContainer);
         this.addTaskEventHandlers(currentTask, {
             taskContainer,
@@ -192,6 +273,8 @@ class ScreenController {
             currentForm.classList.add('hidden');
             nodelist.task.classList.remove('hidden');
             btnNewTask.removeAttribute('disabled');
+            btnProjectAdd.removeAttribute('disabled');
+            btnRemoveTasks.removeAttribute('disabled');
             currentTask.update(data);
             this.updateTaskView(currentTask, nodelist);
             this.app.updateDateState(
@@ -238,6 +321,16 @@ class ScreenController {
         taskDate.textContent = currentTask.getDate();
         taskPriority.textContent = currentTask.getPriority();
     }
+
+    static updateSelectedTasks(evt) {
+        const { name } = evt.currentTarget.dataset;
+        if (this.app.getActiveProject() === 'name') return;
+        this.app.setActiveProject(name);
+        projectTitle.textContent = name;
+        const selectedTasks = this.app.getSelectedTasks();
+        tasksField.innerHTML = '';
+        selectedTasks.forEach((task) => this.renderTask(task, false));
+    }
 }
 
-export default ScreenController;
+export default Screen;
