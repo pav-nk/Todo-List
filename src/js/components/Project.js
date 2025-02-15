@@ -1,8 +1,6 @@
-import { AppController } from '../controllers/App';
-
 class Project {
-    constructor(data) {
-        this.name = data.name;
+    constructor(name) {
+        this.name = name;
     }
 
     getName() {

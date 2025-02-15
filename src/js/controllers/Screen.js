@@ -27,12 +27,13 @@ class Screen {
         btnProjectClear.addEventListener('click', () => {
             formToAddProject.reset();
         });
-        defaultProject.addEventListener('click', (evt) =>
-            this.updateSelectedTasks(evt),
-        );
+        defaultProject.addEventListener('click', (evt) => {
+            const { name } = evt.currentTarget.dataset;
+            this.updateSelectedTasks(name);
+        });
     }
 
-    static renderProjectItem(data, project) {
+    static renderProjectItem({ name }, project) {
         const menuItem = document.createElement('li');
         menuItem.classList.add('menu-item');
         const link = document.createElement('a');
@@ -42,7 +43,7 @@ class Screen {
         const icon = document.createElement('i');
         icon.classList.add('icon', 'icon-arrow-right');
         const projectName = document.createElement('span');
-        projectName.textContent = data.name;
+        projectName.textContent = name;
         const controls = document.createElement('div');
         controls.classList.add('menu-badge');
 
@@ -59,11 +60,20 @@ class Screen {
         menuItem.append(link, controls);
         projectMenu.append(menuItem);
 
-        this.addProjectEventHandlers(link, btnDelete);
+        this.addProjectEventHandlers(link, btnDelete, menuItem, name);
     }
 
-    static addProjectEventHandlers(link, btnDelete) {
-        link.addEventListener('click', (evt) => this.updateSelectedTasks(evt));
+    static addProjectEventHandlers(link, btnDelete, menuItem, name) {
+        link.addEventListener('click', (evt) => {
+            const { name } = evt.currentTarget.dataset;
+            this.updateSelectedTasks(name);
+        });
+        btnDelete.addEventListener('click', () => {
+            this.updateLabelDate(this.app.getAppCounts());
+            this.app.deleteProject(name);
+            this.updateSelectedTasks('unplaced');
+            menuItem.remove();
+        });
     }
 
     static addNewProject(evt) {
@@ -270,22 +280,27 @@ class Screen {
                 project: formData.get('project'),
                 priority: formData.get('priority'),
             };
-            currentForm.classList.add('hidden');
-            nodelist.task.classList.remove('hidden');
-            btnNewTask.removeAttribute('disabled');
-            btnProjectAdd.removeAttribute('disabled');
-            btnRemoveTasks.removeAttribute('disabled');
             currentTask.update(data);
-            this.updateTaskView(currentTask, nodelist);
             this.app.updateDateState(
                 currentTask.getId(),
                 currentTask.getDate(),
             );
+            if (data.project !== this.app.getActiveProject()) {
+                nodelist.taskContainer.remove();
+            } else {
+                currentForm.classList.add('hidden');
+                nodelist.task.classList.remove('hidden');
+                this.updateTaskView(currentTask, nodelist);
+            }
             this.updateLabelDate(this.app.getAppCounts());
+            btnNewTask.removeAttribute('disabled');
+            btnProjectAdd.removeAttribute('disabled');
+            btnRemoveTasks.removeAttribute('disabled');
         });
         nodelist.btnDeleteTask.addEventListener('click', (evt) => {
             nodelist.taskContainer.remove();
             this.app.deleteTask(currentTask.getId());
+            this.updateLabelDate(this.app.getAppCounts());
         });
         nodelist.btnEditTask.addEventListener('click', (evt) => {
             nodelist.task.classList.add('hidden');
@@ -322,9 +337,8 @@ class Screen {
         taskPriority.textContent = currentTask.getPriority();
     }
 
-    static updateSelectedTasks(evt) {
-        const { name } = evt.currentTarget.dataset;
-        if (this.app.getActiveProject() === 'name') return;
+    static updateSelectedTasks(name) {
+        if (this.app.getActiveProject() === name) return;
         this.app.setActiveProject(name);
         projectTitle.textContent = name;
         const selectedTasks = this.app.getSelectedTasks();

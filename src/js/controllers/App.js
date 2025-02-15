@@ -4,7 +4,7 @@ import Task from '../components/Task';
 class App {
     static date = new Date().toISOString().split('T')[0];
     static tasks = [];
-    static projects = [new Project({ name: 'unplaced' })];
+    static projects = [new Project('unplaced')];
     static completedTasks = [];
     static activeProject = 'unplaced';
     static priorities = ['Default', 'Low', 'High'];
@@ -66,13 +66,18 @@ class App {
     }
 
     static createProject(data = {}) {
-        const project = new Project(data);
+        const project = new Project(data.name || '');
         this.projects.push(project);
         return project;
     }
 
     static deleteTask(id) {
         this.tasks = this.tasks.filter((task) => task.getId() !== id);
+        if (this.counts.taskDateObj[id].isToday) {
+            this.counts.today -= 1;
+        } else {
+            this.counts.upcoming -= 1;
+        }
         delete this.counts.taskDateObj[id];
     }
 
@@ -93,6 +98,13 @@ class App {
         this.tasks = this.tasks.filter(
             (task) => task.getProject() !== this.getActiveProject(),
         );
+    }
+
+    static deleteProject(name) {
+        this.projects = this.projects.filter(
+            (project) => project.getName() !== name,
+        );
+        this.tasks = this.tasks.filter((task) => task.getProject() !== name);
     }
 }
 
