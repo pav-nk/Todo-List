@@ -85,7 +85,7 @@ h4 {
     gap: 1rem;
 }
 
-.field-tasks {
+.field-todos {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -121,13 +121,13 @@ h4 {
     font-size: 0.8rem;
 }
 
-.task-controls {
+.todo-controls {
     align-items: center;
     display: flex;
     gap: 0.2rem;
 }
 
-.task-info {
+.todo-info {
     align-items: center;
     gap: 0.2rem;
 }
@@ -151,7 +151,7 @@ h4 {
     padding-right: 0.5rem;
 }
 
-.task-name {
+.todo-name {
     font-size: 0.8rem;
 }
 

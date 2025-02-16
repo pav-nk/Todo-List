@@ -1,11 +1,12 @@
-class Project {
-    constructor(name) {
-        this.name = name;
-    }
+const Project = (name) => {
+    const name = name;
+    const id = Date.now();
 
-    getName() {
+    const getName = () => {
         return this.name;
-    }
-}
+    };
 
-export default Project;
+    return { getName };
+};
+
+export { Project };

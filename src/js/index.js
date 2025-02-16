@@ -1,8 +1,9 @@
 import 'spectre.css';
 import '../scss/style.scss';
 
-import Screen from './controllers/Screen';
+import { ScreenController } from './controllers/ScreenController';
 
 document.addEventListener('DOMContentLoaded', () => {
-    Screen.init();
+    const app = ScreenController();
+    app.init();
 });
