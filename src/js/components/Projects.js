@@ -1,7 +1,7 @@
 import { Project } from './Projects';
 
 const Projects = () => {
-    const projects = [];
+    let projects = [];
 
     const createProject = (name) => {
         const project = Project(name);
@@ -15,6 +15,8 @@ const Projects = () => {
     const deleteProject = (id) => {
         projects = projects.filter((project) => id !== project.id);
     };
+
+    return { getAllProjectNames, createProject, deleteProject }
 };
 
 export { Projects };

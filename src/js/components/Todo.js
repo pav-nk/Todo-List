@@ -8,7 +8,10 @@ const Todo = () => {
         isCompleted: false,
         project: 'unplaced',
         description: '',
+        isEditMode: true,
     };
+
+
 
     const switchStatus = () => {
         state.isCompleted = !state.isCompleted;
@@ -46,15 +49,23 @@ const Todo = () => {
         return this.state;
     };
 
-    const updateState = ({ name, date, priority, description, project }) => {
+    const getEditModeValue = () => {
+        return state.isEditMode;
+    }
+
+    const switchEditMode = () => {
+        state.isEditMode = !state.isEditMode;
+    }
+
+    const updateState = ({ name, date, isImportant, description, project }) => {
         state.name = name;
         state.date = date;
-        state.priority = priority;
+        state.isImportant = isImportant;
         state.description = description;
         state.project = project;
     };
 
-    return { updateState, getState, getId };
+    return { updateState, getState, getId, getEditModeValue, getName, getDate, getPriority, getDescription, switchEditMode, switchStatus, getStatus };
 };
 
 export { Todo };

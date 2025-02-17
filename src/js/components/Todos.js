@@ -1,7 +1,5 @@
-import { Todo } from './Todo';
-
 const Todos = () => {
-    const todos = [];
+    let todos = [];
 
     const addTodo = (todo) => {
         todos.push(todo);
@@ -12,12 +10,10 @@ const Todos = () => {
     };
 
     const getAllTodos = () => {
-        return items;
+        return todos;
     };
 
-    const deleteAllTodosInProject = (projectName) => {};
-
-    return { addTodo };
+    return { addTodo, deleteTodo, getAllTodos };
 };
 
 export { Todos };

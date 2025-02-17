@@ -22,6 +22,10 @@ h4 {
     margin: 0;
 }
 
+.input-group {
+    gap: 0.5rem;
+}
+
 .title {
     display: flex;
     align-items: center;
@@ -159,6 +163,14 @@ h4 {
     display: flex;
     align-items: center;
     gap: 0.2rem;
+}
+
+.field-footer .input-group {
+    gap: 0;
+}
+
+.projects .input-group {
+    gap: 0;
 }
 
 .hidden {

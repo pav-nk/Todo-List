@@ -17,7 +17,11 @@ const AppController = () => {
         return todo;
     };
 
-    return { createTodo, getActiveProject };
+    const deleteTodo = (id) => {
+        todos.deleteTodo(id);
+    }
+
+    return { createTodo, deleteTodo, getActiveProject, setActiveProject };
 };
 
 export { AppController };
