@@ -1,11 +1,12 @@
-import { Project } from './Projects';
+import { Project } from './Project';
 
 const Projects = () => {
-    const projects = [];
+    let projects = [Project('unplaced')];
 
     const createProject = (name) => {
         const project = Project(name);
         projects.push(project);
+        return project;
     };
 
     const getAllProjectNames = () => {
@@ -15,6 +16,8 @@ const Projects = () => {
     const deleteProject = (id) => {
         projects = projects.filter((project) => id !== project.id);
     };
+
+    return { getAllProjectNames, createProject, deleteProject };
 };
 
 export { Projects };

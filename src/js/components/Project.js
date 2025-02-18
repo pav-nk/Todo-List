@@ -1,12 +1,14 @@
 const Project = (name) => {
-    const name = name;
+    let currentName = name;
     const id = Date.now();
 
     const getName = () => {
-        return this.name;
+        return currentName;
     };
 
-    return { getName };
+    const getId = () => id;
+
+    return { getName, getId };
 };
 
 export { Project };

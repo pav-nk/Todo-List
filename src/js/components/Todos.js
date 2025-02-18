@@ -1,7 +1,5 @@
-import { Todo } from './Todo';
-
 const Todos = () => {
-    const todos = [];
+    let todos = [];
 
     const addTodo = (todo) => {
         todos.push(todo);
@@ -12,12 +10,18 @@ const Todos = () => {
     };
 
     const getAllTodos = () => {
-        return items;
+        return todos;
     };
 
-    const deleteAllTodosInProject = (projectName) => {};
+    const clearTodos = (project) => {
+        todos = todos.filter((todo) => todo.getProject() !== project);
+    };
 
-    return { addTodo };
+    const getSelectedTodos = (project) => {
+        return todos.filter((todo) => todo.getProject() === project);
+    };
+
+    return { addTodo, deleteTodo, getAllTodos, clearTodos, getSelectedTodos };
 };
 
 export { Todos };
