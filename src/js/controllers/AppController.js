@@ -8,7 +8,7 @@ const AppController = () => {
     let activeProject = 'unplaced';
     const projects = Projects();
 
-    const dateNow = new Date().toISOString().split('T')[0];
+    let todayDate = new Date().toISOString().split('T')[0];
 
     const getActiveProject = () => activeProject;
 
@@ -19,6 +19,10 @@ const AppController = () => {
         todos.addTodo(todo);
         return todo;
     };
+
+    const getDefaultProject = () => projects.getDefaultProject();
+
+    const getDate = () => todayDate;
 
     const deleteTodo = (id) => {
         todos.deleteTodo(id);
@@ -44,6 +48,18 @@ const AppController = () => {
         return projects.getAllProjectNames();
     };
 
+    const getTodayTodos = () => {
+        return todos.getTodayTodos(getDate());
+    };
+
+    const getSomedayTodos = () => {
+        return todos.getSomedayTodos(getDate());
+    };
+
+    const getCompletedTodos = () => {
+        return todos.getCompletedTodos();
+    };
+
     return {
         createTodo,
         deleteTodo,
@@ -54,6 +70,10 @@ const AppController = () => {
         createProject,
         deleteProject,
         getProjectsNames,
+        getTodayTodos,
+        getSomedayTodos,
+        getCompletedTodos,
+        getDefaultProject,
     };
 };
 

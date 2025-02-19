@@ -21,7 +21,28 @@ const Todos = () => {
         return todos.filter((todo) => todo.getProject() === project);
     };
 
-    return { addTodo, deleteTodo, getAllTodos, clearTodos, getSelectedTodos };
+    const getTodayTodos = (todayDate) => {
+        return todos.filter((todo) => todo.getDate() === todayDate);
+    };
+
+    const getSomedayTodos = (todayDate) => {
+        return todos.filter((todo) => todo.getDate() !== todayDate);
+    };
+
+    const getCompletedTodos = () => {
+        return todos.filter((todo) => todo.getStatus());
+    };
+
+    return {
+        addTodo,
+        deleteTodo,
+        getAllTodos,
+        clearTodos,
+        getSelectedTodos,
+        getTodayTodos,
+        getSomedayTodos,
+        getCompletedTodos,
+    };
 };
 
 export { Todos };

@@ -17,7 +17,14 @@ const Projects = () => {
         projects = projects.filter((project) => id !== project.id);
     };
 
-    return { getAllProjectNames, createProject, deleteProject };
+    const getDefaultProject = () => projects[0];
+
+    return {
+        getAllProjectNames,
+        createProject,
+        deleteProject,
+        getDefaultProject,
+    };
 };
 
 export { Projects };

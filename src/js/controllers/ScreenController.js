@@ -4,6 +4,10 @@ const labelToday = document.getElementById('label-today');
 const labelUpcoming = document.getElementById('label-upcoming');
 const labelCompleted = document.getElementById('label-completed');
 
+const btnGroupToday = document.getElementById('group-today');
+const btnGroupSomeday = document.getElementById('group-someday');
+const btnGroupCompleted = document.getElementById('group-completed');
+
 const todosField = document.getElementById('field-todos');
 const addTodoBtn = document.getElementById('btn-new-todo');
 const btnRemoveTodos = document.getElementById('btn-remove-todo');
@@ -11,7 +15,6 @@ const projectMenu = document.getElementById('project-menu');
 const projectForm = document.getElementById('form-project');
 const btnProjectClear = document.getElementById('btn-project-clear');
 const btnProjectAdd = document.getElementById('btn-project-add');
-const defaultProjectItem = document.getElementById('default-project');
 const projectTitle = document.getElementById('project-title');
 
 const ScreenController = () => {
@@ -23,14 +26,53 @@ const ScreenController = () => {
         btnProjectClear.addEventListener('click', () => {
             projectForm.reset();
         });
-        defaultProjectItem.addEventListener('click', (evt) => {
-            const { name } = evt.currentTarget.dataset;
-            updateTodosField(name);
-        });
         projectForm.addEventListener('submit', (evt) => {
             evt.preventDefault();
             createNewProject(evt.currentTarget);
         });
+        btnGroupToday.addEventListener('click', (evt) => {
+            const { currentTarget } = evt;
+            const currentName = currentTarget.dataset.name;
+            const todayTodos = app.getTodayTodos();
+            updateGroupField(currentName, todayTodos);
+            switchAccessButtons(true);
+        });
+        btnGroupSomeday.addEventListener('click', (evt) => {
+            const { currentTarget } = evt;
+            const currentName = currentTarget.dataset.name;
+            const somedayTodos = app.getSomedayTodos();
+            updateGroupField(currentName, somedayTodos);
+            switchAccessButtons(true);
+        });
+        btnGroupCompleted.addEventListener('click', (evt) => {
+            const { currentTarget } = evt;
+            const currentName = currentTarget.dataset.name;
+            const completedTodos = app.getCompletedTodos();
+            updateGroupField(currentName, completedTodos);
+            switchAccessButtons(true);
+        });
+
+        renderProject('unplaced', app.getDefaultProject());
+    };
+
+    const switchAccessButtons = (isGroup) => {
+        if (isGroup) {
+            btnProjectAdd.setAttribute('disabled', '');
+            btnProjectClear.setAttribute('disabled', '');
+            addTodoBtn.setAttribute('disabled', '');
+            btnRemoveTodos.setAttribute('disabled', '');
+        } else {
+            btnProjectAdd.removeAttribute('disabled');
+            btnProjectClear.removeAttribute('disabled');
+            addTodoBtn.removeAttribute('disabled');
+            btnRemoveTodos.removeAttribute('disabled');
+        }
+    };
+
+    const updateGroupField = (name, todos) => {
+        projectTitle.textContent = name;
+        todosField.innerHTML = '';
+        todos.forEach((todo) => renderTodo(todo));
     };
 
     const createNewProject = (target) => {
@@ -42,7 +84,6 @@ const ScreenController = () => {
     };
 
     const updateTodosField = (name) => {
-        if (app.getActiveProject() === name) return;
         app.setProject(name);
         projectTitle.textContent = name;
         const selectedTodos = app.getSelectedTodos();
@@ -53,11 +94,18 @@ const ScreenController = () => {
     const clearTodos = () => {
         app.clearCurrentTodos();
         todosField.innerHTML = '';
+        updateGroupLabels();
     };
 
     const addTodo = () => {
         const todo = app.createTodo();
         renderTodo(todo);
+    };
+
+    const updateGroupLabels = () => {
+        labelToday.textContent = app.getTodayTodos().length;
+        labelUpcoming.textContent = app.getSomedayTodos().length;
+        labelCompleted.textContent = app.getCompletedTodos().length;
     };
 
     const addTodoEvents = (
@@ -74,6 +122,9 @@ const ScreenController = () => {
             btnEditTodo,
             btnDeleteTodo,
             inputCheckboxTodo,
+            inputDesc,
+            inputName,
+            inputDate,
         },
     ) => {
         todoForm.addEventListener('submit', (evt) => {
@@ -101,7 +152,12 @@ const ScreenController = () => {
                     todoDate,
                     todoPriority,
                     todoContainer,
+                    inputCheckboxTodo,
+                    inputDesc,
+                    inputName,
+                    inputDate,
                 });
+                updateGroupLabels();
             }
         });
         btnEditTodo.addEventListener('click', () => {
@@ -109,20 +165,24 @@ const ScreenController = () => {
             todoEl.classList.add('hidden');
             todoForm.classList.remove('hidden');
         });
-        inputCheckboxTodo.addEventListener('click', () => {
+        inputCheckboxTodo.addEventListener('click', (evt) => {
+            const { currentTarget } = evt;
             todo.switchStatus();
-            switchTodoStatusView(todoName, todoContainer);
+            switchTodoStatusView(todoName, todoContainer, currentTarget);
+            updateGroupLabels();
         });
         btnDeleteTodo.addEventListener('click', () => {
             todoContainer.remove();
             app.deleteTodo(todo.getId());
+            updateGroupLabels();
         });
     };
 
-    const switchTodoStatusView = (name, container) => {
+    const switchTodoStatusView = (name, container, checkbox) => {
         name.classList.toggle('completed');
         container.classList.toggle('bg-gray');
         container.classList.toggle('bg-secondary');
+        checkbox.toggleAttribute('checked');
     };
 
     const renderTodo = (todo) => {
@@ -238,6 +298,9 @@ const ScreenController = () => {
                 todoPriority,
                 todoContainer,
                 inputCheckboxTodo,
+                inputDesc,
+                inputName,
+                inputDate,
             });
             todoForm.classList.add('hidden');
         }
@@ -254,6 +317,9 @@ const ScreenController = () => {
             btnEditTodo,
             btnDeleteTodo,
             inputCheckboxTodo,
+            inputDesc,
+            inputName,
+            inputDate,
         });
     };
 
@@ -269,13 +335,14 @@ const ScreenController = () => {
         projectName.textContent = name;
         const controls = document.createElement('div');
         controls.classList.add('menu-badge');
-
         const btnDelete = document.createElement('button');
         btnDelete.classList.add('btn', 'btn-sm', 'btn-action');
         const deleteIcon = document.createElement('i');
         deleteIcon.classList.add('icon', 'icon-delete');
         btnDelete.append(deleteIcon);
-        controls.append(btnDelete);
+        if (name !== 'unplaced') {
+            controls.append(btnDelete);
+        }
         link.append(projectName);
         menuItem.append(link, controls);
         projectMenu.append(menuItem);
@@ -286,12 +353,15 @@ const ScreenController = () => {
         link.addEventListener('click', (evt) => {
             const { name } = evt.currentTarget.dataset;
             updateTodosField(name);
+            switchAccessButtons(false);
         });
-        btnDelete.addEventListener('click', () => {
-            app.deleteProject(name);
-            updateTodosField('unplaced');
-            menuItem.remove();
-        });
+        if (btnDelete) {
+            btnDelete.addEventListener('click', () => {
+                app.deleteProject(name);
+                updateTodosField('unplaced');
+                menuItem.remove();
+            });
+        }
     };
 
     const updateTodoView = (
@@ -303,8 +373,14 @@ const ScreenController = () => {
             todoPriority,
             todoContainer,
             inputCheckboxTodo,
+            inputDesc,
+            inputName,
+            inputDate,
         },
     ) => {
+        inputDesc.value = todo.getDescription();
+        inputName.value = todo.getName();
+        inputDate.value = todo.getDate();
         todoName.textContent = todo.getName();
         todoDesc.textContent = todo.getDescription();
         todoDate.textContent = todo.getDate();
@@ -315,7 +391,7 @@ const ScreenController = () => {
             todoPriority.classList.add('hidden');
         }
         if (todo.getStatus()) {
-            switchTodoStatusView(todoName, todoContainer);
+            switchTodoStatusView(todoName, todoContainer, inputCheckboxTodo);
         }
     };
 
